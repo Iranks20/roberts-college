@@ -1,0 +1,153 @@
+/*
+  Roberts College design tokens
+  Layout: calm working surfaces on a cool paper ground; Nile green carries actions,
+  crane gold is reserved for "now" and for the few things that deserve a glance.
+  Colours are RGB triplets so Tailwind can apply opacity (bg-nile/10).
+*/
+/* Fonts are bundled with the app (no external font host needed). */
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 400; font-display: swap; src: url('../node_modules/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 500; font-display: swap; src: url('../node_modules/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 600; font-display: swap; src: url('../node_modules/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Hanken Grotesk'; font-style: normal; font-weight: 700; font-display: swap; src: url('../node_modules/@fontsource/hanken-grotesk/files/hanken-grotesk-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Young Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../node_modules/@fontsource/young-serif/files/young-serif-latin-400-normal.woff2') format('woff2'); }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: 246 248 247;
+  --surface: 255 255 255;
+  --sunken: 238 242 240;
+  --ink: 19 32 28;
+  --muted: 84 99 94;
+  --faint: 128 143 138;
+  --line: 221 229 226;
+  --nile: 15 90 74;
+  --nile-deep: 10 64 53;
+  --nile-tint: 227 239 235;
+  --nile-on: 255 255 255;
+  --crane: 233 169 43;
+  --crane-tint: 252 243 222;
+  --crane-ink: 110 72 6;
+  --good: 30 132 87;
+  --good-tint: 225 243 233;
+  --warn: 166 104 14;
+  --warn-tint: 252 240 220;
+  --bad: 190 52 42;
+  --bad-tint: 251 230 227;
+  --info: 39 98 170;
+  --info-tint: 228 237 249;
+  --shadow: 15 40 34;
+  --band: 10 64 53;
+  --on-band: 255 255 255;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: 12 20 18;
+    --surface: 19 30 27;
+    --sunken: 15 24 22;
+    --ink: 230 238 235;
+    --muted: 160 178 172;
+    --faint: 115 133 127;
+    --line: 38 53 49;
+    --nile: 74 190 155;
+    --nile-deep: 120 214 184;
+    --nile-tint: 22 52 45;
+    --nile-on: 6 30 24;
+    --crane: 240 186 72;
+    --crane-tint: 56 44 20;
+    --crane-ink: 245 205 120;
+    --good: 80 200 140;
+    --good-tint: 20 50 36;
+    --warn: 230 170 70;
+    --warn-tint: 55 42 18;
+    --bad: 240 110 100;
+    --bad-tint: 60 26 24;
+    --info: 120 170 240;
+    --info-tint: 22 36 60;
+    --shadow: 0 0 0;
+    --band: 18 42 36;
+    --on-band: 230 238 235;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: 12 20 18;
+  --surface: 19 30 27;
+  --sunken: 15 24 22;
+  --ink: 230 238 235;
+  --muted: 160 178 172;
+  --faint: 115 133 127;
+  --line: 38 53 49;
+  --nile: 74 190 155;
+  --nile-deep: 120 214 184;
+  --nile-tint: 22 52 45;
+  --nile-on: 6 30 24;
+  --crane: 240 186 72;
+  --crane-tint: 56 44 20;
+  --crane-ink: 245 205 120;
+  --good: 80 200 140;
+  --good-tint: 20 50 36;
+  --warn: 230 170 70;
+  --warn-tint: 55 42 18;
+  --bad: 240 110 100;
+  --bad-tint: 60 26 24;
+  --info: 120 170 240;
+  --info-tint: 22 36 60;
+  --shadow: 0 0 0;
+  --band: 18 42 36;
+  --on-band: 230 238 235;
+  color-scheme: dark;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 15px;
+    line-height: 1.55;
+    font-feature-settings: 'ss01';
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  :focus-visible { outline: 2px solid rgb(var(--nile)); outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: rgb(var(--crane) / 0.35); }
+  table { font-variant-numeric: tabular-nums; }
+  /* Grid and flex children may shrink below their content width, so long text wraps instead of widening the page. */
+  .grid > * { min-width: 0; }
+}
+
+@layer components {
+  .h-display { @apply font-display font-normal tracking-[-0.01em] text-ink; }
+  .num { font-variant-numeric: tabular-nums; }
+  .card { @apply bg-surface border border-line rounded-card; }
+  .field-label { @apply block text-[13px] font-semibold text-ink mb-1.5; }
+  .field-hint { @apply text-[12.5px] text-muted mt-1.5; }
+  .input {
+    @apply w-full h-11 px-3.5 rounded-ctl bg-surface border border-line text-ink placeholder:text-faint
+      transition-colors focus:outline-none focus:border-nile focus:ring-2 focus:ring-nile/20;
+  }
+  textarea.input { @apply h-auto py-2.5 leading-relaxed; }
+  .link { @apply text-nile font-semibold underline-offset-4 hover:underline; }
+  .scroll-x { @apply overflow-x-auto; -webkit-overflow-scrolling: touch; }
+  .pattern-paper {
+    background-image: radial-gradient(rgb(var(--line)) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.live-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
+@keyframes sheet-up { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.anim-sheet { animation: sheet-up 0.22s ease-out; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.anim-fade { animation: fade-in 0.18s ease-out; }
+@keyframes toast-in { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
+.anim-toast { animation: toast-in 0.2s ease-out; }
