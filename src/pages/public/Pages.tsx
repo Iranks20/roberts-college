@@ -35,7 +35,7 @@ export function Academics() {
     <>
       <Hero title="Academics" photo="computerLab" lead="Roberts College follows the Cambridge International curriculum from Year 4 to Year 13. Every subject is taught live by a specialist teacher, with recordings, notes and marked work in one place.">
         <nav className="mt-8 flex flex-wrap gap-2" aria-label="Stages">
-          {levels.map((l) => <a key={l.id} href={`#/academics#${l.id}`} onClick={(e) => { e.preventDefault(); document.getElementById(l.id)?.scrollIntoView({ behavior: 'smooth' }) }} className="rounded-full border border-line bg-surface px-4 py-2 text-[14px] font-semibold hover:border-nile hover:text-nile">{l.short} <span className="num font-medium text-muted">Y{l.years[0]}–{l.years[l.years.length - 1]}</span></a>)}
+          {levels.map((l) => <a key={l.id} href={`/academics#${l.id}`} onClick={(e) => { e.preventDefault(); document.getElementById(l.id)?.scrollIntoView({ behavior: 'smooth' }) }} className="rounded-full border border-line bg-surface px-4 py-2 text-[14px] font-semibold hover:border-nile hover:text-nile">{l.short} <span className="num font-medium text-muted">Y{l.years[0]}–{l.years[l.years.length - 1]}</span></a>)}
         </nav>
       </Hero>
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6">

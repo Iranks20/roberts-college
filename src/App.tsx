@@ -1,4 +1,9 @@
-import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
+import { lazy, Suspense, type ComponentType } from 'react'
+import { BrowserRouter, HashRouter, Route, Routes, Navigate } from 'react-router-dom'
+
+// Clean URLs (/student/grades) on the real site. The single-file demo build runs inside a viewer
+// frame that cannot serve deep links, so only that build keeps hash URLs.
+const Router = import.meta.env.MODE === 'demo' ? HashRouter : BrowserRouter
 import { SessionProvider } from './lib/session'
 import { ToastProvider } from './components/ui'
 import { PreviewBadge } from './components/PreviewBadge'
@@ -10,20 +15,70 @@ import { Academics, Admissions, OnlineLearning, About, Contact, Credits } from '
 import { Apply, Track } from './pages/public/Apply'
 import { Privacy, Safeguarding, NotFound } from './pages/public/Policies'
 import { useDocumentTitle } from './lib/useTitle'
-import StudentDashboard from './pages/student/Dashboard'
-import { Courses, CourseDetail, LessonView, LibraryPage, Forums } from './pages/student/Learning'
-import { Assignments, AssignmentDetail, Quiz } from './pages/student/Work'
-import { Grades, StudentReport, Attendance, StudentFees, Tutor } from './pages/student/Progress'
-import { TimetablePage } from './pages/shared/Timetable'
-import LiveClassroom from './pages/shared/LiveClassroom'
-import { Messages, Announcements, Profile } from './pages/shared/Comms'
 import { y10Timetable, okelloTimetable } from './data/school'
-import { TeacherDashboard, TeacherClasses, ClassDetail, Planner, Materials, TeacherPay, Approvals } from './pages/teacher/Teacher'
-import { ParentDashboard, ChildPage, ParentReports, ParentFees } from './pages/parent/Parent'
-import { RegistrarDashboard, ApplicationsList, ApplicationDetail, StudentRecords, StudentRecord } from './pages/staff/Registrar'
-import { BursarDashboard, InvoicesPage, PaymentsPage, AccessPage, FeeStructure, Payroll, FinanceReports } from './pages/staff/Bursar'
-import { AdminDashboard, UsersRoles, CalendarAdmin, Academics as AdminAcademics, TimetableBuilder, Settings, AuditLog } from './pages/staff/Admin'
-import { TeacherAssignments, NewAssignment, MarkingView, Gradebook, ReportComments } from './pages/teacher/Marking'
+
+
+// Portals load on demand, so visitors to the public website only download the website.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const lz = (load: () => Promise<any>, name: string) => lazy(() => load().then((m) => ({ default: m[name] as ComponentType<any> })))
+const StudentDashboard = lazy(() => import('./pages/student/Dashboard'))
+const Courses = lz(() => import('./pages/student/Learning'), 'Courses')
+const CourseDetail = lz(() => import('./pages/student/Learning'), 'CourseDetail')
+const LessonView = lz(() => import('./pages/student/Learning'), 'LessonView')
+const LibraryPage = lz(() => import('./pages/student/Learning'), 'LibraryPage')
+const Forums = lz(() => import('./pages/student/Learning'), 'Forums')
+const Assignments = lz(() => import('./pages/student/Work'), 'Assignments')
+const AssignmentDetail = lz(() => import('./pages/student/Work'), 'AssignmentDetail')
+const Quiz = lz(() => import('./pages/student/Work'), 'Quiz')
+const Grades = lz(() => import('./pages/student/Progress'), 'Grades')
+const StudentReport = lz(() => import('./pages/student/Progress'), 'StudentReport')
+const Attendance = lz(() => import('./pages/student/Progress'), 'Attendance')
+const StudentFees = lz(() => import('./pages/student/Progress'), 'StudentFees')
+const Tutor = lz(() => import('./pages/student/Progress'), 'Tutor')
+const TimetablePage = lz(() => import('./pages/shared/Timetable'), 'TimetablePage')
+const LiveClassroom = lazy(() => import('./pages/shared/LiveClassroom'))
+const Messages = lz(() => import('./pages/shared/Comms'), 'Messages')
+const Announcements = lz(() => import('./pages/shared/Comms'), 'Announcements')
+const Profile = lz(() => import('./pages/shared/Comms'), 'Profile')
+const TeacherDashboard = lz(() => import('./pages/teacher/Teacher'), 'TeacherDashboard')
+const TeacherClasses = lz(() => import('./pages/teacher/Teacher'), 'TeacherClasses')
+const ClassDetail = lz(() => import('./pages/teacher/Teacher'), 'ClassDetail')
+const Planner = lz(() => import('./pages/teacher/Teacher'), 'Planner')
+const Materials = lz(() => import('./pages/teacher/Teacher'), 'Materials')
+const TeacherPay = lz(() => import('./pages/teacher/Teacher'), 'TeacherPay')
+const Approvals = lz(() => import('./pages/teacher/Teacher'), 'Approvals')
+const ParentDashboard = lz(() => import('./pages/parent/Parent'), 'ParentDashboard')
+const ChildPage = lz(() => import('./pages/parent/Parent'), 'ChildPage')
+const ParentReports = lz(() => import('./pages/parent/Parent'), 'ParentReports')
+const ParentFees = lz(() => import('./pages/parent/Parent'), 'ParentFees')
+const RegistrarDashboard = lz(() => import('./pages/staff/Registrar'), 'RegistrarDashboard')
+const ApplicationsList = lz(() => import('./pages/staff/Registrar'), 'ApplicationsList')
+const ApplicationDetail = lz(() => import('./pages/staff/Registrar'), 'ApplicationDetail')
+const StudentRecords = lz(() => import('./pages/staff/Registrar'), 'StudentRecords')
+const StudentRecord = lz(() => import('./pages/staff/Registrar'), 'StudentRecord')
+const BursarDashboard = lz(() => import('./pages/staff/Bursar'), 'BursarDashboard')
+const InvoicesPage = lz(() => import('./pages/staff/Bursar'), 'InvoicesPage')
+const PaymentsPage = lz(() => import('./pages/staff/Bursar'), 'PaymentsPage')
+const AccessPage = lz(() => import('./pages/staff/Bursar'), 'AccessPage')
+const FeeStructure = lz(() => import('./pages/staff/Bursar'), 'FeeStructure')
+const Payroll = lz(() => import('./pages/staff/Bursar'), 'Payroll')
+const FinanceReports = lz(() => import('./pages/staff/Bursar'), 'FinanceReports')
+const AdminDashboard = lz(() => import('./pages/staff/Admin'), 'AdminDashboard')
+const UsersRoles = lz(() => import('./pages/staff/Admin'), 'UsersRoles')
+const CalendarAdmin = lz(() => import('./pages/staff/Admin'), 'CalendarAdmin')
+const AdminAcademics = lz(() => import('./pages/staff/Admin'), 'Academics')
+const TimetableBuilder = lz(() => import('./pages/staff/Admin'), 'TimetableBuilder')
+const Settings = lz(() => import('./pages/staff/Admin'), 'Settings')
+const AuditLog = lz(() => import('./pages/staff/Admin'), 'AuditLog')
+const TeacherAssignments = lz(() => import('./pages/teacher/Marking'), 'TeacherAssignments')
+const NewAssignment = lz(() => import('./pages/teacher/Marking'), 'NewAssignment')
+const MarkingView = lz(() => import('./pages/teacher/Marking'), 'MarkingView')
+const Gradebook = lz(() => import('./pages/teacher/Marking'), 'Gradebook')
+const ReportComments = lz(() => import('./pages/teacher/Marking'), 'ReportComments')
+
+function PageLoading() {
+  return <div className="flex min-h-[50vh] items-center justify-center" role="status" aria-label="Loading"><span className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-nile" /></div>
+}
 
 function TitleSync() { useDocumentTitle(); return null }
 
@@ -31,7 +86,8 @@ export default function App() {
   return (
     <SessionProvider>
       <ToastProvider>
-        <HashRouter>
+        <Router>
+          <Suspense fallback={<PageLoading />}>
           <Routes>
             <Route element={<PublicLayout />}>
               <Route index element={<Home />} />
@@ -145,9 +201,10 @@ export default function App() {
               <Route path="*" element={<Navigate to="/admin" replace />} />
             </Route>
           </Routes>
+          </Suspense>
           <TitleSync />
           <PreviewBadge />
-        </HashRouter>
+        </Router>
       </ToastProvider>
     </SessionProvider>
   )

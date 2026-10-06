@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
 import { Bell, Menu as MenuIcon, X, Moon, Sun, Monitor, SunMoon, Check, LogOut, UserRound, Repeat2, Search, MoreHorizontal } from 'lucide-react'
 import { Logo, Mark } from '../components/Logo'
@@ -137,7 +137,9 @@ export function PortalLayout({ role: routeRole }: { role: Role }) {
       </header>
 
       <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1240px] focus:outline-none px-4 pb-28 pt-6 sm:px-6 sm:pt-8 lg:px-10 lg:pb-16">
-        <Outlet />
+        <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center" role="status" aria-label="Loading"><span className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-nile" /></div>}>
+          <Outlet />
+        </Suspense>
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }} aria-label="Quick">

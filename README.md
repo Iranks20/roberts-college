@@ -15,6 +15,20 @@ npm run build:demo   # one self-contained HTML file in dist-demo/ (used for the 
 
 Requires Node 20 or newer.
 
+## Deploy to Netlify
+
+The project is ready for Netlify; `netlify.toml` holds the settings.
+
+1. Push this folder to a GitHub repository.
+2. In Netlify choose **Add new site → Import an existing project** and pick the repository.
+3. Netlify reads `netlify.toml` automatically: build command `npm run build`, publish folder `dist`, Node 22.
+4. Deploy. Every page has a clean address (for example `/student/grades`), and the redirect rule in
+   `netlify.toml` / `public/_redirects` makes refreshing or sharing any address work.
+
+Without GitHub: run `npm run build` and drag the `dist` folder onto https://app.netlify.com/drop.
+
+`netlify.toml` also sets long-term caching for the hashed files in `/assets` and basic security headers.
+
 ## How the client should test it
 
 1. Open the test link and look around the public website: Home, Academics, Admissions and fees, How online school works, About, Contact.
@@ -79,7 +93,9 @@ Design tokens (colours, fonts) live in `src/index.css` and `tailwind.config.js`.
 
 ## Notes for the backend phase
 
-- Swap `HashRouter` for `BrowserRouter` once the app is served by the backend.
+- Routing uses clean URLs (`BrowserRouter`). Only the single-file demo build (`npm run build:demo`) uses `#` URLs,
+  because it runs inside a viewer frame.
+- Portal pages are code-split: the public website loads first and each portal downloads when it is opened.
 - Replace imports from `data/school.ts` with API calls, keeping the same shapes.
 - Live classroom: the UI is ready for an embeddable video engine (e.g. BigBlueButton, Jitsi, or a Zoom/Agora SDK).
   The video tiles, whiteboard canvas and chat panel are where that engine plugs in.
